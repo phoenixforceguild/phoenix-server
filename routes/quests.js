@@ -30,7 +30,7 @@ router.get("/:id:", function(req, res){
         }else if(doc == null){
         	res.contentType('application/json');
             res.status(404);
-            error.message="User Not Found";
+            error.message="Quest Not Found";
     	}else{
             res.status(200);
             res.contentType('application/json');
@@ -53,3 +53,6 @@ router.post("/", function(req,res){
             res.send(JSON.stringify(newQuest));
     });
 });
+
+
+module.exports = router;

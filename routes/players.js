@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models/user');
+var Player = require('../models/player');
 
 router.get("/", function(req, res){
   var error = {};
-  User.find({},function(err,doc){
+  Player.find({},function(err,doc){
     if(err){
       res.contentType('application/json');
       res.status(500);
@@ -20,7 +20,7 @@ router.get("/", function(req, res){
 
 router.get("/:id:", function(req, res){
   var error = {};    
-  User.findOne({id:req.param.id},function(err,doc){
+  Player.findOne({id:req.param.id},function(err,doc){
     if(err){
       res.contentType('application/json');
       res.status(500);
@@ -29,7 +29,7 @@ router.get("/:id:", function(req, res){
     }else if(doc == null){
       res.contentType('application/json');
       res.status(404);
-      error.message="User Not Found";
+      error.message="Player Not Found";
     }else{
       res.status(200);
       res.contentType('application/json');
@@ -40,9 +40,9 @@ router.get("/:id:", function(req, res){
 });
 
 router.post("/", function(req,res){
-  let newUser = new User(req.body);
+  let newPlayer = new Player(req.body);
 
-  User.save(function(err) {
+  Player.save(function(err) {
     if (errr) {
       error.code = err2.code;
       error.message = err2.message;
@@ -50,7 +50,7 @@ router.post("/", function(req,res){
       error.code == 11000 ? res.status(409) : res.status(500);
     }else{
       res.status(201);
-      res.send(JSON.stringify(User));
+      res.send(JSON.stringify(Player));
     }
   });
 });
