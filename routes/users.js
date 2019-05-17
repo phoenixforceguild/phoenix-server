@@ -3,40 +3,27 @@ var router = express.Router();
 var User = require('../models/user');
 
 router.get("/", function(req, res){
-  var error = {};
-  User.find({},function(err,doc){
-    if(err){
-      res.contentType('application/json');
-      res.status(500);
-      error.code = err.code;
-      error.message = err.message;
-    }else{
-      res.contentType('application/json');
-      res.status(200);
-      res.send(JSON.stringify({"result":doc, "error":error}));
+  User.find().then(function(user){
+    if(user){
+      return res.json(user);
+    }
+    else{
+      return res.sendStatus(404);
     }
   });
 });
 
-router.get("/:id:", function(req, res){
-  var error = {};    
-  User.findOne({id:req.param.id},function(err,doc){
-    if(err){
-      res.contentType('application/json');
-      res.status(500);
-      error.code = err.code;
-      error.message = err.message;
-    }else if(doc == null){
-      res.contentType('application/json');
-      res.status(404);
-      error.message="User Not Found";
-    }else{
-      res.status(200);
-      res.contentType('application/json');
-    }
-    
-    res.send(JSON.stringify({"result":doc.toObject(), "error":error}));
-  });
+router.get("/:id", function(req, res){
+  if(req.params){
+    User.findById(req.params.id).then(function(user){
+      if(user){
+        return res.json(user);
+      }
+      else{
+        return res.sendStatus(404);
+      }
+    }).catch((err) => {console.log(err);res.sendStatus(400)});
+  }
 });
 
 router.post("/", function(req,res){
